@@ -17,47 +17,88 @@ menuOpener.addEventListener('click', ()=>{
 
 //Testemonials
 //vetor que contém as variável com texto
+//TESTEMONIALS
+//vetor de objetos contendo as frases e os icones
 let testemonials = [
-    {quote:'"Mais do que nunca, os animais são tratados como membros da família"' ,origin:'cbs.svg' },
-    {quote:'"Dogdev é um serviço de entrega direto ao consumidor, preparado na hora com ingredientes 100% reais. Ingredientes que humanos reconheceriam."' ,origin:'forbes.svg' },
-    {quote:'Dogdev usa ingredientes simples e limpos em seus produtos.' ,origin:'fox.svg' },
-    {quote:'Vejo você Dogdev como um verdadeiro herói' ,origin:'sharktank.svg' }
+    {quote:'"Mais do que nunca, os animais '+
+     'são tratados como membros da familia"', origin:'cbs.svg' },
+    {quote:'"DogDev é um serviço de entrega direto ao '+
+        'consumidor, preparado na hora com ingredientes 100% '+
+        'reais. Ingredientes que humanos reconheceriam"',
+        origin:'forbes.svg' },
+    {quote:'"DogDev usa ingredientes simples e limpos em '+
+        'seus produtos."', origin:'fox.svg' },
+    {quote:'"Vejo você DogDev como um verdadeiro herói"',
+        origin:'sharktank.svg' }
 ];
-//captura os elementos do html
-let testemonialQuote = document.querySelector('.testemonials .quote');
-let testemonialIcons = document.querySelector('.testemonial .icons');
+//captura os elementos do html usando queryselector
+let testemonialQuote =
+document.querySelector('.testemonials .quote');
+let testemonialIcons =
+document.querySelector('.testemonials .icons');
 
-//repetição para criar imagens
+//repetição para criar as imagens
 for(let tindex in testemonials){
-    let img = document.createElement('img')
-    img.setAttribute('src', './assets/images'+testesmonials[parseInt(tindex)])
-    img.style.cursor = 'pointer'
-    img.addEventListener('click', ()=>fillTestemonial(parseInt(tindex)));
-    testemonialIcons.appendChild(img)
+    let img = document.createElement('img');
+    img.setAttribute('src', './assets/images/'+
+        testemonials[parseInt(tindex)].origin);
+    img.style.cursor='pointer';
+    img.addEventListener('click',
+        ()=>fillTestemonial(parseInt(tindex)));
+    testemonialIcons.appendChild(img);
 }
-//variavel que controla a testemonial atual
-let currentTestemonial = 0
-let testemonialTimer
+//variavel para controlar o testemunho atual
+let currentTestemonial = 0;
+//variavel para controlar o tempo de cada testemunho
+let testemonialTimer;
 
 //função para preencher o testemunho
 const fillTestemonial = (index) =>{
     clearTimeout(testemonialTimer);
     currentTestemonial = index;
-    //acessa do testemunho apenas a frase
-    testemonialQuote.innerHTML = testemonials[currentTestemonial].quote
-    let imgs = testemonialIcons.querySelectorAll('img')
-
-    for(let img of imgs) img.style.opacity='0.2'
-    imgs[currentTestemonial].style.opacity='1'
-    testemonialTimer = setTimeout(nextTestemonial, 3000)
+    //acessa o item quote dentro do vetor de testemunhos
+    testemonialQuote.innerHTML =
+        testemonials[currentTestemonial].quote;
+    let imgs = testemonialIcons.querySelectorAll('img');
+    for(let img of imgs) img.style.opacity=0.2;
+    imgs[currentTestemonial].style.opacity=1;
+    testemonialTimer = setTimeout(nextTestemonial, 3000);
 }
 
+//função que passa para o proximo testemunho
 const nextTestemonial = () =>{
-    if(testesmonials[currentTestemonial+1]){
-        fillTestemonial(currentTestemonial+1)
+    if(testemonials[currentTestemonial+1]){
+        fillTestemonial(currentTestemonial+1);
     }else{
-        fillTestemonial(0)
+        fillTestemonial(0);
     }
 }
-//Inicia a exibição de testemunhos
-nextTestemonial()
+//inicia a exibição dos testemunhos
+nextTestemonial();
+
+//FAQ
+//variavel para controlar o item faq atual
+let currentFaq =0;
+//seleciona os elementos com a classe item dentro do accordion
+let faqItems =
+document.querySelectorAll('.faq .accordion .item');
+//listener para item do faq
+faqItems.forEach((el, index)=>{
+    el.querySelector('.title').addEventListener('click', ()=>
+    setFaq(index));
+});
+//função para definir o faq a ser exibido
+const setFaq = (index) =>{
+    currentFaq = index;
+    //se o item atual ja estiver aberto, fecha e retorna
+    if(faqItems[currentFaq].classList.contains('opened')){
+        faqItems[currentFaq].classList.remove('opened');
+        return;
+    }
+    //remove a classe opened de todos os itens
+    for(let item of faqItems){
+        item.classList.remove('opened');
+    }
+    //adiciona a classe opened no item atual
+    faqItems[currentFaq].classList.add('opened');
+}
